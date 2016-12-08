@@ -3,9 +3,13 @@ import sys
 import os
 
 def main():
-    for line in sys.stdin:
+    while True:
+        line = input(os.getcwd() + ' $ ')
         args = parse_line(line)
-        execute_line(args)
+        if args[0] in builtin_functions:
+            builtin_functions[args[0]](args)
+        else:
+            execute_line(args)
 
 def execute_line(args):
     pid = os.fork()
@@ -68,8 +72,20 @@ def parse_line(line):
                 current_arg += s
         else:
             current_arg += s
-
+    append_arg(False)
     return args
+
+def builtin_cd(args):
+    directory = args[1] if len(args) > 1 else '~'
+    os.chdir(os.path.expanduser(directory))
+
+def builtin_exit(args):
+    exit()
+
+builtin_functions = {
+        "cd": builtin_cd,
+        "exit": builtin_exit
+        }
 
 if __name__ == '__main__':
     main()
