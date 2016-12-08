@@ -16,7 +16,7 @@ def execute_line(args):
     if pid == 0:
         os.execvp(args[0], args)
     elif pid < 0:
-        print("error at fork!")
+        print("error with fork!")
     else:
         while True:
             wpid, status = os.waitpid(pid, os.WUNTRACED)
